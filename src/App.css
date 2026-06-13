@@ -1,0 +1,169 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f4f7fc;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.container {
+  max-width: 1500px;
+  margin: auto;
+  padding: 30px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 3rem;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.header p {
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.search-box input {
+  width: 650px;
+  max-width: 95%;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.search-box input:focus {
+  outline: none;
+}
+
+.stats {
+  margin-bottom: 20px;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(420px, 1fr)
+  );
+  gap: 25px;
+}
+
+.news-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+}
+
+.news-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.news-logo {
+  height: 90px;
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1e3a8a
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.news-logo h2 {
+  color: white;
+  letter-spacing: 5px;
+  font-size: 2rem;
+}
+
+.badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: white;
+  color: #1e3a8a;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.news-content {
+  padding: 25px;
+}
+
+.news-content h3 {
+  color: #111827;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  font-size: 1.35rem;
+}
+
+.news-content p {
+  color: #4b5563;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.news-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.news-footer span {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.news-footer a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.news-footer a:hover {
+  color: #1d4ed8;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 100px;
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .news-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .news-content h3 {
+    font-size: 1.1rem;
+  }
+}
