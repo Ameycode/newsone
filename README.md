@@ -38,7 +38,7 @@ RSS Feeds → n8n Workflow → Webhook API → React Frontend
 
 ### Clone Repository
 
-git clone https://github.com/yourusername/newsone.git
+git clone https://github.com/Ameycode/newsone.git
 
 ### Install Dependencies
 
