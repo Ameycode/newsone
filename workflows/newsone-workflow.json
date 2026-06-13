@@ -1,0 +1,310 @@
+{
+  "name": "News API",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "newsone",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -64,
+        0
+      ],
+      "id": "5cf311c5-db6f-4672-8bfc-1786885e3955",
+      "name": "Webhook",
+      "webhookId": "a2b443a5-b4d3-444d-9800-3c72a73a4f59"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.bbci.co.uk/news/rss.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        -128
+      ],
+      "id": "cda81acf-d167-421d-8022-4b3be215957a",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {
+        "url": "https://techcrunch.com/feed/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        0
+      ],
+      "id": "e544df67-e6c8-4f20-8463-e94d082dd815",
+      "name": "RSS Read1"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.feedburner.com/TheHackersNews",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        128
+      ],
+      "id": "e7ed0ac1-4b04-4557-8411-d02042d3d077",
+      "name": "RSS Read2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        336,
+        -80
+      ],
+      "id": "82a6ad50-7692-4dfe-9b6f-e1566d2fa525",
+      "name": "Merge"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        480,
+        48
+      ],
+      "id": "7b5ea47e-2036-44e2-8d9a-fe9d0cdf12bb",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const seen = new Set();\n\nreturn items.filter(item => {\n  const title = item.json.title\n    ?.toLowerCase()\n    .trim();\n\n  if (!title) return false;\n\n  if (seen.has(title)) {\n    return false;\n  }\n\n  seen.add(title);\n\n  return true;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        48
+      ],
+      "id": "ad7e9e2f-9cc0-4eba-9131-5bd290ca7c72",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({\n  json: {\n    title: item.json.title || \"\",\n    \n    description:\n      item.json.contentSnippet ||\n      item.json.content ||\n      item.json.summary ||\n      \"\",\n\n    link: item.json.link || \"\",\n\n    publishedDate:\n      item.json.isoDate ||\n      item.json.pubDate ||\n      \"\",\n\n    source:\n      item.json.creator ||\n      item.json.source ||\n      item.json.feedTitle ||\n      \"Unknown\",\n\n    image:\n      item.json.enclosure?.url ||\n      item.json[\"media:content\"]?.url ||\n      \"\"\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        48
+      ],
+      "id": "4927ce90-03e7-4953-a9fc-472528f74646",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "items.sort((a, b) => {\n  return new Date(\n    b.json.publishedDate\n  ) - new Date(\n    a.json.publishedDate\n  );\n});\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        48
+      ],
+      "id": "fd8b60c0-5e8a-444b-b322-52e904c812bf",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.slice(0, 50);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        48
+      ],
+      "id": "e2ce7f36-b5b6-463a-a29c-11a5b4f2edf0",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      success: true,\n      count: items.length,\n      news: items.map(\n        item => item.json\n      )\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        48
+      ],
+      "id": "5be62578-78ca-4901-8c4e-84e921090635",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1696,
+        48
+      ],
+      "id": "568147d7-951e-4f8c-b0e9-c82a3a430ae5",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS Read1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS Read2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read2": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "68e7e206-a7c8-4e5f-aeb1-201070fbc281",
+  "meta": {
+    "instanceId": "203f33446edfe8be43c83253a1b979e6574a239e51ec1683cdd82f29fd3770d3"
+  },
+  "id": "IWDSXk8VNBqJDSOg",
+  "tags": []
+}
